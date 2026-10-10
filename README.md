@@ -73,7 +73,7 @@ Built with the Next.js App Router, it talks to a separate Spring Boot backend AP
 
 - Node.js 20.9 or newer (required by Next.js 16)
 - pnpm
-- A running instance of the [backend](YOUR_BACKEND_REPO_LINK)
+- A running instance of the [backend](https://github.com/Soumadeep1221/MoneyManager-Backend.git)
 - Google OAuth client credentials, if Google sign-in is enabled
 - A Cloudinary cloud name and unsigned upload preset, if profile image uploads are enabled
 
