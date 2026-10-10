@@ -1,0 +1,340 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap");
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+/* ─── Design Tokens ─────────────────────────────────────────── */
+@theme inline {
+  /* Radius */
+  --radius-xs: 0.25rem;
+  --radius-sm: 0.375rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.75rem;
+  --radius-xl: 1rem;
+  --radius-2xl: 1.25rem;
+  --radius-full: 9999px;
+  --radius: 0.5rem;
+
+  /* Colors mapped to CSS variables */
+  --color-background:      var(--background);
+  --color-foreground:      var(--foreground);
+  --color-card:            var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-primary:         var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary:       var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted:           var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent:          var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive:     var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border:          var(--border);
+  --color-input:           var(--input);
+  --color-ring:            var(--ring);
+
+  /* Semantic color aliases — names must match class names used in components */
+  --color-income:           var(--income-color);
+  --color-expense:          var(--expense-color);
+
+  /* success / danger (used as text-success, bg-success, text-danger, bg-danger) */
+  --color-success:          var(--success);
+  --color-danger:           var(--danger);
+
+  /* *-light variants (bg-success-light, bg-danger-light, bg-warning-light, bg-info-light) */
+  --color-success-light:    var(--success-light);
+  --color-danger-light:     var(--danger-light);
+  --color-warning-light:    var(--warning-light);
+  --color-info-light:       var(--info-light);
+
+  /* warning / info text */
+  --color-warning:          var(--warning);
+  --color-info:             var(--info);
+
+  /* foreground-muted (text-foreground-muted) */
+  --color-foreground-muted: var(--foreground-muted);
+
+  /* background-secondary (bg-background-secondary) */
+  --color-background-secondary: var(--background-secondary);
+
+  /* divider (bg-divider, divide-divider) */
+  --color-divider:          var(--divider);
+
+  /* primary-light (bg-primary-light) */
+  --color-primary-light:    var(--primary-light);
+
+  /* Sidebar */
+  --color-sidebar:         var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-border:  var(--sidebar-border);
+  --color-sidebar-accent:  var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-muted:   var(--sidebar-muted);
+
+  /* border-subtle, input-bg used with bg-* and border-* utilities */
+  --color-border-subtle:   var(--border-subtle);
+  --color-input-bg:        var(--input-bg);
+}
+
+/* ─── Light Mode Variables ────────────────────────────────── */
+:root {
+  /* Backgrounds */
+  --background:            #fafbfc;
+  --background-secondary:  #ffffff;
+  --foreground:            #0a0e27;
+  --foreground-muted:      #6b7280;
+
+  /* Cards */
+  --card:                  #ffffff;
+  --card-foreground:       #0f1117;
+
+  /* Primary — Deep Teal */
+  --primary:               #0d7377;
+  --primary-hover:         #05505c;
+  --primary-light:         #ecf5f6;
+  --primary-foreground:    #ffffff;
+
+  /* Secondary — Warm neutral */
+  --secondary:             #f0f2f5;
+  --secondary-foreground:  #374151;
+
+  /* Muted */
+  --muted:                 #f0f2f5;
+  --muted-foreground:      #6b7280;
+
+  /* Accent */
+  --accent:                #ecf5f6;
+  --accent-foreground:     #0d7377;
+
+  /* Destructive */
+  --destructive:           #dc2626;
+  --destructive-foreground: #ffffff;
+
+  /* Borders & inputs */
+  --border:                #e5e7eb;
+  --border-subtle:         #f0f0f0;
+  --input-bg:              #f9fafb;
+  --divider:               #f3f4f6;
+  --ring:                  #0d7377;
+
+  /* Semantic — Income (Success) */
+  --income-color:          #059669;
+  --success:               #059669;
+  --success-light:         #ecfdf5;
+
+  /* Semantic — Expense (Danger) */
+  --expense-color:         #dc2626;
+  --danger:                #dc2626;
+  --danger-light:          #fee2e2;
+
+  /* Semantic — Warning */
+  --warning:               #d97706;
+  --warning-light:         #fef3c7;
+
+  /* Semantic — Info */
+  --info:                  #0284c7;
+  --info-light:            #e0f2fe;
+
+  /* Sidebar */
+  --sidebar:               #0f1f1a;
+  --sidebar-foreground:    #d1fae5;
+  --sidebar-border:        #1e3a30;
+  --sidebar-accent:        #1a3d30;
+  --sidebar-accent-foreground: #6ee7b7;
+  --sidebar-muted:         #6b8f7f;
+
+  /* Chart palette */
+  --chart-1:               #0d7377;
+  --chart-2:               #14b8a6;
+  --chart-3:               #f59e0b;
+  --chart-4:               #ef4444;
+  --chart-5:               #8b5cf6;
+  --chart-6:               #06b6d4;
+}
+
+/* ─── Dark Mode Variables ────────────────────────────────── */
+.dark {
+  --background:            #0a0e27;
+  --background-secondary:  #111827;
+  --foreground:            #f8fafc;
+  --foreground-muted:      #cbd5e1;
+
+  --primary:               #14b8a6;
+  --primary-hover:         #0d9488;
+  --primary-light:         #043f36;
+
+  --success:               #10b981;
+  --success-light:         #064e3b;
+  --danger:                #f87171;
+  --danger-light:          #7c2d12;
+  --warning:               #f59e0b;
+  --warning-light:         #78350f;
+  --info:                  #38bdf8;
+  --info-light:            #082f49;
+
+  --border:                #1e293b;
+  --border-subtle:         #374151;
+  --input-bg:              #1f2937;
+  --divider:               #27374a;
+
+  --income-color:          #10b981;
+  --expense-color:         #f87171;
+
+  --chart-1:               #14b8a6;
+  --chart-2:               #06b6d4;
+  --chart-3:               #f59e0b;
+  --chart-4:               #f87171;
+  --chart-5:               #a78bfa;
+  --chart-6:               #22d3ee;
+}
+
+/* ─── Base Styles ─────────────────────────────────────────── */
+*, *::before, *::after {
+  box-sizing: border-box;
+  border-color: var(--border);
+}
+
+html {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--background);
+  color: var(--foreground);
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-size: 0.9375rem;
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+/* ─── Scrollbar ───────────────────────────────────────────── */
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: #d1d5db;
+  border-radius: 999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #9ca3af;
+}
+
+/* ─── Focus Ring ──────────────────────────────────────────── */
+:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+}
+
+/* ─── Animations ──────────────────────────────────────────── */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeInDown {
+  from { opacity: 0; transform: translateY(-12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideInLeft {
+  from { opacity: 0; transform: translateX(-20px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes slideInRight {
+  from { opacity: 0; transform: translateX(20px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes scaleIn {
+  from { opacity: 0; transform: scale(0.95); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+@keyframes shimmer {
+  0%   { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes pulse-soft {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+.animate-fade-in     { animation: fadeIn 0.3s ease both; }
+.animate-fade-in-up  { animation: fadeInUp 0.35s ease both; }
+.animate-fade-in-down { animation: fadeInDown 0.3s ease both; }
+.animate-slide-in-left { animation: slideInLeft 0.3s ease both; }
+.animate-slide-in-right { animation: slideInRight 0.3s ease both; }
+.animate-scale-in    { animation: scaleIn 0.25s ease both; }
+.animate-spin-custom { animation: spin 0.8s linear infinite; }
+
+/* Staggered children */
+.stagger-children > *:nth-child(1) { animation-delay: 0ms; }
+.stagger-children > *:nth-child(2) { animation-delay: 60ms; }
+.stagger-children > *:nth-child(3) { animation-delay: 120ms; }
+.stagger-children > *:nth-child(4) { animation-delay: 180ms; }
+.stagger-children > *:nth-child(5) { animation-delay: 240ms; }
+.stagger-children > *:nth-child(6) { animation-delay: 300ms; }
+
+/* ─── Skeleton Loader ─────────────────────────────────────── */
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    #f0f0f0 25%,
+    #e0e0e0 50%,
+    #f0f0f0 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.4s ease-in-out infinite;
+  border-radius: var(--radius-md);
+}
+
+/* ─── Custom Utilities ────────────────────────────────────── */
+.glass {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.card-hover {
+  transition: box-shadow 0.2s ease, transform 0.2s ease;
+}
+.card-hover:hover {
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  transform: translateY(-1px);
+}
+
+.text-balance { text-wrap: balance; }
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ─── Number formatting ───────────────────────────────────── */
+.tabular-nums {
+  font-variant-numeric: tabular-nums;
+}
