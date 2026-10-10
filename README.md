@@ -328,9 +328,3 @@ Backend tokens expire after 30 minutes and are not refreshed. Sign in again.
 
 1. Confirm both Cloudinary variables are set.
 2. Confirm the upload preset is **unsigned** and permits browser uploads.
-
----
-
-## Author
-
-Soumadeep
