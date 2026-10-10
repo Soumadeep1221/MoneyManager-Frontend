@@ -16,7 +16,7 @@ The frontend for **Money Manager**, a personal finance application for recording
 
 Built with the Next.js App Router, it talks to a separate Spring Boot backend API.
 
-**Backend repository:** [Money Manager Backend](YOUR_BACKEND_REPO_LINK)
+**Backend repository:** [Money Manager Backend](https://github.com/Soumadeep1221/MoneyManager-Backend.git)
 
 ---
 
