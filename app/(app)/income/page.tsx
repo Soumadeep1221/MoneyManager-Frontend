@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import { Calendar, Plus, Search, Trash2, TrendingUp } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { categoryService, formatDate, formatINR, incomeService, todayISO, type CategoryDTO, type IncomeDTO } from "@/lib/api";
 import { averageOf, formatChartDate, groupByCategory, latestOf, mergeTimeline, totalOf } from "@/lib/finance";
 import { FinanceTrendChart, CategoryDonut } from "@/components/ui/finance-visuals";
@@ -48,6 +49,7 @@ function AddIncomeModal({ open, onClose, onSuccess, categories }: { open: boolea
     if (!name) errors.name = "Name is required";
     if (!amount || Number(amount) <= 0 || Number.isNaN(Number(amount))) errors.amount = "Enter an amount greater than 0";
     if (!date) errors.date = "Date is required";
+    if (!categoryId) errors.categoryId = "Please select a category";
 
     if (Object.keys(errors).length) {
       setFieldErrors(errors);
@@ -94,7 +96,7 @@ function AddIncomeModal({ open, onClose, onSuccess, categories }: { open: boolea
             <Input label="Amount (₹)" name="amount" type="number" min="1" step="1" placeholder="0" error={fieldErrors.amount} required />
             <Input label="Date" name="date" type="date" defaultValue={todayISO()} error={fieldErrors.date} required />
           </div>
-          {catOptions.length > 0 && <Select label="Category" name="categoryId" options={catOptions} placeholder="Select a category" />}
+          <Select label="Category" name="categoryId" options={catOptions} placeholder="Select a category" error={fieldErrors.categoryId} required />
         </div>
         <ModalFooter>
           <Button type="button" variant="outline" size="sm" onClick={onClose} disabled={loading}>
@@ -139,6 +141,7 @@ function IncomeRow({ income, onDelete }: { income: IncomeDTO; onDelete: (id: num
 }
 
 export default function IncomePage() {
+  const router = useRouter();
   const { success, error: toastError } = useToast();
   const [incomes, setIncomes] = React.useState<IncomeDTO[]>([]);
   const [categories, setCategories] = React.useState<CategoryDTO[]>([]);
@@ -201,7 +204,7 @@ export default function IncomePage() {
           <h1 className="mt-2 text-3xl font-bold tracking-tight text-foreground">Income</h1>
           <p className="mt-1 text-sm text-foreground-muted">Track your earnings and understand where your money comes from.</p>
         </div>
-        <Button onClick={() => setAddOpen(true)} size="sm">
+        <Button onClick={() => setAddOpen(true)} size="sm" disabled={loading || categories.length === 0}>
           <Plus size={14} />
           Add Income
         </Button>
@@ -320,7 +323,7 @@ export default function IncomePage() {
               description={search ? `Nothing matching "${search}"` : "Add your first income to see trends here."}
               action={
                 !search ? (
-                  <Button size="sm" onClick={() => setAddOpen(true)}>
+                  <Button size="sm" onClick={() => setAddOpen(true)} disabled={categories.length === 0}>
                     <Plus size={13} />
                     Add Income
                   </Button>
@@ -353,6 +356,18 @@ export default function IncomePage() {
         description="This record will be permanently removed."
         confirmLabel="Delete"
       />
+      <Modal
+        open={!loading && !error && categories.length === 0}
+        onClose={() => {}}
+        title="Income category required"
+        description="Please create at least one income category before adding income."
+        size="sm"
+        persistent
+      >
+        <Button size="sm" onClick={() => router.push("/categories")}>
+          Go to Categories
+        </Button>
+      </Modal>
     </div>
   );
 }
