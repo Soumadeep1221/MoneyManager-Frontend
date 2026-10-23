@@ -23,7 +23,7 @@ Built with the Next.js App Router, it talks to a separate Spring Boot backend AP
 
 ## Live Demo
 
-**[https://moneymanager-soumadeep1221.netlify.app/](https://moneymanager-soumadeep1221.netlify.app/)**
+**[https://moneymanager-soumadeep1221.netlify.app](https://moneymanager-soumadeep1221.netlify.app)**
 
 > **Please be patient on the first load.** The app runs entirely on free tiers: the backend on Render and the database on Neon. After a period of inactivity, Render spins the backend down (after about 15 minutes) and Neon scales the database down to zero. The first request then has to wake both up, which takes about **2 minutes 10 seconds on average and up to about 2.5 minutes** in my tests. Nothing is broken and the app will not crash. Once the servers are awake, every feature works smoothly.
 
