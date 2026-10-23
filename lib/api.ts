@@ -3,7 +3,8 @@ import axios from "axios";
 // ─── API Base ────────────────────────────────────────────────────────────────
 
 const BASE_URL =
-  process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:8080/api/v1.0";
+  process.env.NEXT_PUBLIC_API_BASE_URL ||
+  "https://moneymanager-1-0-mwxa.onrender.com/api/v1.0";
 
 export const apiClient = axios.create({ baseURL: BASE_URL });
 
