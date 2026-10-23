@@ -11,12 +11,23 @@
 ![Lucide](https://img.shields.io/badge/Lucide_Icons-F56565?style=for-the-badge&logo=lucide&logoColor=white)
 ![pnpm](https://img.shields.io/badge/pnpm-F69220?style=for-the-badge&logo=pnpm&logoColor=white)
 ![Node.js](https://img.shields.io/badge/Node.js-20.9%2B-339933?style=for-the-badge&logo=nodedotjs&logoColor=white)
+![Netlify](https://img.shields.io/badge/Netlify-00C7B7?style=for-the-badge&logo=netlify&logoColor=white)
 
 The frontend for **Money Manager**, a personal finance application for recording income and expenses, organizing transactions, and understanding cash flow through dashboards and charts.
 
 Built with the Next.js App Router, it talks to a separate Spring Boot backend API.
 
 **Backend repository:** [Money Manager Backend](https://github.com/Soumadeep1221/MoneyManager-Backend.git)
+
+---
+
+## Live Demo
+
+**[https://moneymanager-soumadeep1221.netlify.app/](https://moneymanager-soumadeep1221.netlify.app/)**
+
+> **Please be patient on the first load.** The app runs entirely on free tiers: the backend on Render and the database on Neon. After a period of inactivity, Render spins the backend down (after about 15 minutes) and Neon scales the database down to zero. The first request then has to wake both up, which takes about **2 minutes 10 seconds on average and up to about 2.5 minutes** in my tests. Nothing is broken and the app will not crash. Once the servers are awake, every feature works smoothly.
+
+If you find an error, a bug, or any loophole while exploring the app, please let me know. It helps me find problems that could affect users later.
 
 ---
 
@@ -150,6 +161,8 @@ Four settings have to line up between this app and the backend, or specific feat
 | CORS allowed origin | This app's origin | Every browser request to the API |
 | Google Cloud authorized JavaScript origins | This app's origin | The Google sign-in popup |
 
+For the deployed app, the origin is `https://moneymanager-soumadeep1221.netlify.app` (written without a trailing slash).
+
 ---
 
 ## Technology
@@ -164,6 +177,7 @@ Four settings have to line up between this app and the backend, or specific feat
 - Cloudinary unsigned image uploads
 - Lucide React icons
 - pnpm
+- Netlify (frontend hosting)
 
 ---
 
@@ -300,25 +314,65 @@ When deploying, also update the backend and Google configuration for the new fro
 
 ---
 
+## Deployment
+
+The full application is deployed on free tiers:
+
+| Part | Platform | Details |
+| --- | --- | --- |
+| Frontend | Netlify | Next.js is auto-detected. Build command `pnpm run build`, publish directory `.next` |
+| Backend | Render (Web Service, Free plan) | Spring Boot app packaged as a Docker image and pulled from Docker Hub |
+| Database | Neon | Serverless PostgreSQL (free tier) |
+
+### How it was deployed
+
+1. **Database:** create a Neon project, copy its credentials, and give them to the backend through environment variables. The JDBC URL needs `sslmode=require`.
+2. **Backend:** build the JAR with Maven, write a Dockerfile, build the image, test it locally against the Neon database, push it to Docker Hub, then create a Render Web Service from that existing image and add the environment variables.
+3. **Frontend:** import this repository into Netlify and set every `NEXT_PUBLIC_*` variable **before** the first deploy, with `NEXT_PUBLIC_API_BASE_URL` pointing to the Render backend (including `/api/v1.0`).
+4. **Connect both sides:** set the backend's `FRONTEND_URL` to the Netlify URL, allow that origin in the backend's CORS configuration, and add it to the Google OAuth client's authorized JavaScript origins.
+
+A minimal Dockerfile for the backend (this lives in the backend repository):
+
+```dockerfile
+FROM eclipse-temurin:25-jre
+COPY target/app.jar app.jar
+CMD ["java", "-jar", "app.jar"]
+```
+
+### Free-tier limitations
+
+- Render's free web service spins down after about 15 minutes of inactivity, and Neon scales its database to zero when idle. The first request after that can take about 2 to 2.5 minutes while both wake up.
+- Render's free tier blocks outbound SMTP ports (25, 465, 587), so the backend sends activation emails through Brevo's HTTP API (over HTTPS) instead of SMTP.
+
+---
+
 ## Troubleshooting
 
 ### The frontend cannot connect to the backend
 
 1. Confirm the backend is running.
 2. Confirm `NEXT_PUBLIC_API_BASE_URL` includes the `/api/v1.0` prefix.
-3. Confirm the backend allows requests from `http://localhost:3000`.
+3. Confirm the backend allows requests from `http://localhost:3000` (or the deployed frontend origin).
 4. Restart the Next.js development server after changing `.env.local`.
+
+### The deployed app seems stuck or very slow at first
+
+On the free tiers, the backend and database go to sleep when idle. Wait up to about 2.5 minutes for the first request to finish. This is expected behavior and not an error.
 
 ### Google sign-in fails
 
 1. Confirm `NEXT_PUBLIC_GOOGLE_CLIENT_ID` is set and is the same client ID the backend uses as `GOOGLE_CLIENT_ID`.
-2. Add `http://localhost:3000` to the authorized JavaScript origins in Google Cloud.
+2. Add `http://localhost:3000` (and the deployed frontend origin) to the authorized JavaScript origins in Google Cloud.
 3. While the Google consent screen is in Testing mode, only listed test users can sign in.
 4. If a Google profile photo renders blank, set `referrerPolicy="no-referrer"` on the `<img>` element.
 
 ### The activation link does not open this app
 
 The link is built by the backend from its `FRONTEND_URL` variable. Set it to this app's origin and restart the backend.
+
+### The activation email does not arrive
+
+Check the spam folder first. Emails sent from a free mailbox address through an email service can be filtered as spam.
 
 ### I get signed out after a short time
 
